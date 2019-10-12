@@ -53,7 +53,9 @@ services:
         - elasticsearch543
         - kibana543
         - randomlog2
+  ## ----------------------------------------------
 
+  ## ----------------------------------------------
   randomlog1:
     image: ubuntu:18.04
     command: >-
@@ -95,23 +97,21 @@ services:
   kibana740:
     image: docker.elastic.co/kibana/kibana:7.4.0
     environment:
-      - NODE_OPTIONS=--max-old-space-size=8000
-      - ELASTICSEARCH_URL=http://elasticsearch543:9200
-      - ELASTICSEARCH_HOSTS=http://elasticsearch543:9200
+      - ELASTICSEARCH_URL=http://elasticsearch740:9200
     volumes:
-      - ./config/kibana.yml:/usr/share/kibana/config/kibana.yml
+      - ./740/config/kibana.yml:/usr/share/kibana/config/kibana.yml
     ports:
       - 15601:5601
     links:
       - elasticsearch740
 
   elasticsearch740:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.40
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
     environment:
       - ES_JAVA_OPTS=-Xms750m -Xmx750m
     volumes:
-      - ./config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - esdata543:/usr/share/elasticsearch/data
+      - ./740/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - esdata740:/usr/share/elasticsearch/data
     ports:
       - 19200:9200
       - 19300:9300
@@ -121,11 +121,10 @@ services:
       environment:
         - LS_JAVA_OPTS=-Xms750m -Xmx750m
         - ELASTICSEARCH_URL=http://elasticsearch:9200
-        - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
       volumes:
-        - ./config/logstash_randomlog.yml:/usr/share/logstash/config/logstash.yml
-        - ./config/pipelines.yml:/usr/share/logstash/config/pipelines.yml
-        - ./pipeline/randomlog/randomlog.conf:/usr/share/logstash/pipeline/randomlog/randomlog.conf
+        - ./740/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+        - ./740/config/pipelines.yml:/usr/share/logstash/config/pipelines.yml
+        - ./740/pipeline:/usr/share/logstash/pipeline
         - ./shared:/var/shared
       links:
         - elasticsearch740
