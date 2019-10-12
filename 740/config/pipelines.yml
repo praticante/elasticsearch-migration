@@ -1,0 +1,4 @@
+
+## reandomlog pipeline
+- pipeline.id: randomlog
+  path.config: /usr/share/logstash/pipeline/randomlog.conf

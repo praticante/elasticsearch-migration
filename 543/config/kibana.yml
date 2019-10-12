@@ -1,0 +1,5 @@
+
+server.name: kibana543
+server.host: "0"
+
+elasticsearch.url: "http://elasticsearch543:9200"

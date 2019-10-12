@@ -1,0 +1,140 @@
+version: '3'
+
+services:
+
+  ## ----------------------------------------------
+  kibana543:
+    image: docker.elastic.co/kibana/kibana:5.4.3
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch543:9200
+    volumes:
+      - ./543/config/kibana.yml:/usr/share/kibana/config/kibana.yml
+    ports:
+      - 5601:5601
+    links:
+      - elasticsearch543
+
+  elasticsearch543:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.4.3
+    environment:
+      - ES_JAVA_OPTS=-Xms750m -Xmx750m
+    volumes:
+      - ./543/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - esdata543:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+
+  logstash543_randomlog1:
+      image: docker.elastic.co/logstash/logstash:5.4.3
+      environment:
+        - LS_JAVA_OPTS=-Xms750m -Xmx750m
+        - ELASTICSEARCH_URL=http://elasticsearch:9200
+      volumes:
+        - ./543/config/logstash_randomlog1.yml:/usr/share/logstash/config/logstash.yml
+        - ./543/pipeline1:/usr/share/logstash/pipeline
+        - ./shared:/var/shared
+      links:
+        - elasticsearch543
+        - kibana543
+        - randomlog1
+
+  logstash543_randomlog2:
+      image: docker.elastic.co/logstash/logstash:5.4.3
+      environment:
+        - LS_JAVA_OPTS=-Xms750m -Xmx750m
+        - ELASTICSEARCH_URL=http://elasticsearch:9200
+        - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      volumes:
+        - ./543/config/logstash_randomlog2.yml:/usr/share/logstash/config/logstash.yml
+        - ./543/pipeline2:/usr/share/logstash/pipeline
+        - ./shared:/var/shared
+      links:
+        - elasticsearch543
+        - kibana543
+        - randomlog2
+
+  randomlog1:
+    image: ubuntu:18.04
+    command: >-
+      bash -c "
+        rm /var/shared/randomlog1.log;
+        while true; do
+          paste -d' ' -s <({
+            date -uIseconds;
+            shuf -n 1 -e ERROR DEBUG INFO INFO;
+            find / -name *.conf | shuf -n 1;
+            shuf -n 5 /usr/share/common-licenses/GPL-3;
+          }) >> /var/shared/randomlog1.log;
+          sleep $${RANDOM:0:1};
+        done
+      "
+    volumes:
+      - ./shared:/var/shared
+
+  randomlog2:
+    image: ubuntu:18.04
+    command: >-
+      bash -c "
+        rm /var/shared/randomlog2.log;
+        while true; do
+          paste -d' ' -s <({
+            date -uIseconds;
+            shuf -n 1 -e ERROR DEBUG INFO INFO;
+            find / -name *.conf | shuf -n 1;
+            shuf -n 5 /usr/share/common-licenses/GPL-3;
+          }) >> /var/shared/randomlog2.log;
+          sleep $${RANDOM:0:1};
+        done
+      "
+    volumes:
+      - ./shared:/var/shared
+  ## ----------------------------------------------
+
+  ## ----------------------------------------------
+  kibana740:
+    image: docker.elastic.co/kibana/kibana:7.4.0
+    environment:
+      - NODE_OPTIONS=--max-old-space-size=8000
+      - ELASTICSEARCH_URL=http://elasticsearch543:9200
+      - ELASTICSEARCH_HOSTS=http://elasticsearch543:9200
+    volumes:
+      - ./config/kibana.yml:/usr/share/kibana/config/kibana.yml
+    ports:
+      - 15601:5601
+    links:
+      - elasticsearch740
+
+  elasticsearch740:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.40
+    environment:
+      - ES_JAVA_OPTS=-Xms750m -Xmx750m
+    volumes:
+      - ./config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - esdata543:/usr/share/elasticsearch/data
+    ports:
+      - 19200:9200
+      - 19300:9300
+
+  logstash740:
+      image: docker.elastic.co/logstash/logstash:7.4.0
+      environment:
+        - LS_JAVA_OPTS=-Xms750m -Xmx750m
+        - ELASTICSEARCH_URL=http://elasticsearch:9200
+        - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      volumes:
+        - ./config/logstash_randomlog.yml:/usr/share/logstash/config/logstash.yml
+        - ./config/pipelines.yml:/usr/share/logstash/config/pipelines.yml
+        - ./pipeline/randomlog/randomlog.conf:/usr/share/logstash/pipeline/randomlog/randomlog.conf
+        - ./shared:/var/shared
+      links:
+        - elasticsearch740
+        - kibana740
+        - randomlog1
+        - randomlog2
+
+volumes:
+  esdata543:
+    driver: local
+  esdata740:
+    driver: local
