@@ -1,7 +1,8 @@
-cluster.name: "docker-cluster"
+
+cluster.name: "docker-cluster-740"
 network.host: 0.0.0.0
 
 discovery.type: "single-node"
-#xpack.security.enabled: true
-xpack.security.enabled: false
 discovery.zen.minimum_master_nodes: 1
+
+xpack.security.enabled: false

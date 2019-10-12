@@ -6,6 +6,7 @@ services:
   kibana543:
     image: docker.elastic.co/kibana/kibana:5.4.3
     environment:
+      - NODE_OPTIONS=--max-old-space-size=8000
       - ELASTICSEARCH_URL=http://elasticsearch543:9200
     volumes:
       - ./543/config/kibana.yml:/usr/share/kibana/config/kibana.yml
@@ -97,6 +98,7 @@ services:
   kibana740:
     image: docker.elastic.co/kibana/kibana:7.4.0
     environment:
+      - NODE_OPTIONS=--max-old-space-size=8000
       - ELASTICSEARCH_URL=http://elasticsearch740:9200
     volumes:
       - ./740/config/kibana.yml:/usr/share/kibana/config/kibana.yml

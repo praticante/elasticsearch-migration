@@ -1,7 +1,9 @@
 
-server.name: kibana
+server.name: kibana740
 server.host: "0"
 
 elasticsearch.hosts:
   - "http://localhost:9200"
   - "http://elasticsearch740:9200"
+
+xpack.security.enabled: true

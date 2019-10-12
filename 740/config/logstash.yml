@@ -1,0 +1,6 @@
+
+http.host: "0.0.0.0"
+path.config: /usr/share/logstash/pipeline/randomlog/*.conf
+
+xpack.monitoring.elasticsearch.url: http://elasticsearch740:9200
+#xpack.monitoring.elasticsearch.hosts: [ "http://elasticsearch:9200" ]
