@@ -119,20 +119,29 @@ services:
       - 19300:9300
 
   logstash740:
-      image: docker.elastic.co/logstash/logstash:7.4.0
-      environment:
-        - LS_JAVA_OPTS=-Xms750m -Xmx750m
-        - ELASTICSEARCH_URL=http://elasticsearch:9200
-      volumes:
-        - ./740/config/logstash.yml:/usr/share/logstash/config/logstash.yml
-        - ./740/config/pipelines.yml:/usr/share/logstash/config/pipelines.yml
-        - ./740/pipeline:/usr/share/logstash/pipeline
-        - ./shared:/var/shared
-      links:
-        - elasticsearch740
-        - kibana740
-        - randomlog1
-        - randomlog2
+    image: docker.elastic.co/logstash/logstash:7.4.0
+    environment:
+      - LS_JAVA_OPTS=-Xms750m -Xmx750m
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    volumes:
+      - ./740/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./740/config/pipelines.yml:/usr/share/logstash/config/pipelines.yml
+      - ./740/pipeline:/usr/share/logstash/pipeline
+      - ./shared:/var/shared
+    links:
+      - elasticsearch740
+      - kibana740
+      - randomlog1
+      - randomlog2
+  ## ----------------------------------------------
+
+  ## ----------------------------------------------
+  elasticdump:
+    image: taskrabbit/elasticsearch-dump
+    command: --help
+    working_dir: /var/shared
+    volumes:
+      - ./shared:/var/shared
 
 volumes:
   esdata543:
