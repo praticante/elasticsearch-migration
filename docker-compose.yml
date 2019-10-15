@@ -83,7 +83,7 @@ services:
         while true; do
           paste -d' ' -s <({
             date -uIseconds;
-            shuf -n 1 -e ERROR DEBUG INFO INFO;
+            shuf -n 1 -e ERROR ERROR DEBUG INFO;
             find / -name *.conf | shuf -n 1;
             shuf -n 5 /usr/share/common-licenses/GPL-3;
           }) >> /var/shared/randomlog2.log;

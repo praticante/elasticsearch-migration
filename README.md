@@ -1,5 +1,9 @@
 # elasticsearch-migration
 
+LICENSA
+https://github.com/elastic/elasticsearch/blob/master/licenses/ELASTIC-LICENSE.txt
+
+
 docker-compose run elasticdump sh
 
 elasticdump \
